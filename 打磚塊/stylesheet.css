@@ -1,0 +1,151 @@
+#start { /*遊戲開始開始介面*/
+    position:absolute;
+    height: 700px;
+    width: 600px;
+    left: 450px;
+    background-image: url('bgp.png');
+    text-align: center;
+    line-height: 700px;
+    background-size:cover;
+    background-repeat: no-repeat;
+}
+
+#begin{ /*開始遊戲*/
+    position:relative;
+    bottom: 400px;
+}
+
+#fightarea{/*方塊打擊區*/
+    width: 400px;
+    height: 200px;
+    margin: 0px auto;
+    /*background-color: red;*/
+}
+
+#fightarea > div {
+    width:78px;
+    height: 38px;  
+    float: left;
+    border: 1px solid black;
+}
+
+#windows {/*遊戲視窗*/
+    position: relative;
+    height: 600px;
+    width: 400px;
+    top: 20px;
+    margin: 0px auto;
+    background-image: url('bgp.jfif');
+    background-size:cover;
+    background-repeat: no-repeat;
+    display: none;
+}
+
+#bangs {/*打磚塊*/
+    position: relative;
+    margin: 0px auto;
+    width: 400px;
+    height: 30px;
+    background-color: #0f8ac5;
+    text-align: center;
+    line-height: 30px;
+    display: none;
+}
+
+#instructions { /*說明*/
+    position: absolute;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    background-image: url(q.png);
+    background-size: 30px 30px;
+    top: 0;
+
+}
+
+#instructions:hover > #talk{
+    display: block;
+}
+
+#point {/*分數關卡*/
+    position: absolute;
+    margin: 0px auto;
+    width: 400px;
+    height: 20px;
+    background-color: rgb(240, 235, 213);
+    font-size: 10px;
+    line-height: 20px;
+    display: none;
+}
+#grade {
+    width: 200px;
+    height: 20px;
+
+    text-align: left;
+}
+#talk{/*說明欄*/
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    text-align:left;
+    background-color: #fff8dc;
+    border-radius: 0px 20px 20px 20px;
+    display: none;
+    top: 50px;
+}
+
+#stick {/*棍子*/
+    position: absolute;
+    width: 100px;
+    height: 10px;
+    border-radius: 10px;
+    top: 550px;
+    left: 0px;
+    background-color: red;
+    display: none;
+}
+
+#lessball{/*剩餘球數*/
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: red;
+}
+#ball{/*我的球*/
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: red;
+}
+#ball_less {/*顯示剩餘球數*/
+    font-size: 25px;
+    color: red;
+    font-weight:bold;
+    display: inline-block;
+    position: absolute;
+    top: 570px;
+    left: 340px;
+    width: 60px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+}
+#lb{
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    left: 20px;
+}
+#sup {
+    position: absolute;
+    background-color: red;
+    width: 10px;
+    height: 10px;
+    background-size:cover;
+    background-repeat: no-repeat;
+    
+}

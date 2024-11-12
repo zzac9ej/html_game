@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottery</title>
+    <link rel="stylesheet" href="./stylesheet.css" type="text/css">
+    <script>
+        function gamestart(h){
+            var leavl = 0;//關卡難度
+            var windows = document.getElementById("windows");//遊戲視窗
+            var bangs = document.getElementById("bangs");//劉海
+            var point = document.getElementById("point");//分數<div>
+            var ball = document.getElementById("ball");//球
+            var stick = document.getElementById("stick");//棍子
+            var start = document.getElementById("start");//選擇難度
+            var lessball = document.getElementById("lessball");//剩餘球數<span>
+            var Pt = document.getElementById("Pt");//分數<span>
+            var thegrade = 0;//即時得分訊息
+            var speedX = 5;//x軸速度
+            var speedY = -5;//y軸數度
+            console.log("速度:" + speedX);
+            var tlb = document.getElementById("tlb");//剩餘球數
+            var sup = document.getElementById("sup");//特殊方塊
+            var superrr = 0;//是否吃到特殊方塊
+            var superrrSpy = -5;//特殊球速度
+            b = 0;
+            var superball = false;//是否是超能力球
+            var timer;//每秒測各個div的狀態
+            var mouthMv = true;//
+            var fightarea = document.getElementById("fightarea")//磚塊打擊區
+            var ballflush = 0;//球出現
+            var end = false;//有無結束
+            var ballLeft
+            var ballTop
+            var nextleft
+            var nexttop
+            show(windows);
+            show(bangs);
+            show(point);
+            show(stick);
+            show(start);
+            show(lessball);
+            tlb.innerText = "x" + b;
+            /**/
+            if(h == 0){
+                stick.style.width=400+"px";
+                stick.style.left =  0 + "px";
+                console.log("死人模式")
+            }
+            if(h==2){
+                stick.style.width=50+"px";
+                console.log("困難模式")
+            }
+            doooooor(leavl);
+            document.onkeydown=function(e){
+                var keyNum=window.event ? e.keyCode :e.which;
+                if(keyNum==83){
+                    console.log("玩家案s")
+                    if(ballflush == 0){
+                        show(ball);
+                        getsit(stick, ball);//球從棍子上發射
+                        console.log("發射球")
+                        ballflush++;
+                    }
+                    clearInterval(timer);
+                    timer = setInterval(function(){
+                        findball(ball)
+                        if(superrr == 1){//超級球位置
+                            var supLeft = sup.offsetLeft;
+                            var supTop = sup.offsetTop;
+                        }
+                        afterball(ball)
+                        if(superrr == 1){//超級球運動後位置
+                            var supnt = supTop - superrrSpy;
+                        }
+                        touchwall()
+                        if(supnt-30 >windows.offsetHeight-sup.offsetHeight){//超能力掉出場外
+                            superrr = 0;
+                            show(sup);
+                            console.log("能力掉到場外")
+                        }
+                        ball.style.left = nextleft+"px";//更新運動後位置
+                        ball.style.top= nexttop+"px";
+                        if(superrr == 1){//更新超級球運動後位置
+                            sup.style.top = supnt + "px";
+                        }
+                        if(b_touch_div(ball,stick)){//球和磚塊碰狀
+                            speedY=-speedY;
+                        }
+                        if(b_touch_div(sup,stick)){//吃到超級方塊後消失
+                            console.log("吃到超級方塊")
+                            superball = true;
+                            ball.style.backgroundColor = "green";
+                            var supertime = 10;//超能力持續時間
+                            const interval = setInterval(function() {
+                                supertime--;
+                                if(supertime <= 0 || end == true){
+                                    window.clearInterval(interval)
+                                    superrr=0;
+                                    ball.style.backgroundColor = "red";
+                                    superball = false;
+                                    console.log("超能力時間結束")
+                                }
+                            }, 1000);
+                            show(sup);
+                        }
+                        var FightArr = fightarea.getElementsByTagName("div");
+                        if(!superball){
+                            for(var j=0; j<FightArr.length;j++){
+                                if(b_touch_div(FightArr[j],ball)){
+                                    if(FightArr[j].id == "red"){
+                                        superrr = 1;
+                                        show(sup);
+                                        getsit(FightArr[j], sup);
+                                        console.log("擊中特殊方塊")
+                                    }
+                                    speedY=-speedY
+                                    fightarea.removeChild(FightArr[j]);
+                                    thegrade+=100;
+                                    console.log("一般球時間:分數加100")
+                                    if(thegrade%1000 == 0){
+                                        if(speedX>0){
+                                            speedX += 0.2;
+                                            speedY -= 0.2;
+                                            console.log("速度:" + speedX);
+                                        }
+                                        else{
+                                            speedX -= 0.2;
+                                            speedY += 0.2;
+                                            console.log("速度:" + -(speedX));
+                                        }
+                                        
+                                    }
+                                    Pt.innerHTML=thegrade;
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            for(var j=0; j<FightArr.length;j++){
+                                if(b_touch_div(FightArr[j],ball)){
+                                    if(FightArr[j].id == "red"){
+                                        superrr = 1;
+                                        getsit(FightArr[j], sup);
+                                        show(sup);
+                                    }
+                                    fightarea.removeChild(FightArr[j]);
+                                    thegrade+=100;
+                                    console.log("特殊球時間:分數加100")
+                                    if(thegrade%1000 == 0){
+                                        if(speedX>0){
+                                            speedX += 0.2;
+                                            speedY -= 0.2;
+                                            console.log("速度:" + speedX);
+                                        }
+                                        else{
+                                            speedX -= 0.2;
+                                            speedY += 0.2;
+                                            console.log("速度:" + -(speedX));
+                                        }
+                                    }
+                                    Pt.innerHTML=thegrade;
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        //當容器中方塊數量為0時，宣佈“遊戲勝利”，重新整理頁面
+                        if(FightArr.length<=0){
+                            if(leavl == 2){
+                                location.reload();
+                                alert("恭喜你通過全部的關卡，案確認後重新開始遊戲");
+                            }
+                            end = true;
+                            var tlb = document.getElementById("tlb");
+                            b++;
+                            tlb.innerText = "x" + b;
+                            leavl++;
+                            show(ball);
+                            tlb++;
+                            ballflush = 0;
+                            doooooor(leavl);
+                            alert("恭喜過關");
+                            console.log("通關成功")
+                        }
+                        function findball(ball){
+                            ballLeft =  ball.offsetLeft;//小球位置
+                            ballTop = ball.offsetTop;
+                        }
+                        function afterball(ball){
+                            nextleft = ballLeft + speedX;//小球運動後位置
+                            nexttop = ballTop + speedY;
+                        }
+                        function touchwall(){
+                            if(nextleft+1<=0||nextleft>=windows.offsetWidth-20){//-20是為了讓球剛好砸在邊界上
+                                speedX=-speedX;//x軸速度變負的
+                                //console.log("球碰到邊界")
+                            }                       
+                            if(nexttop+1<=0){
+                                speedY=-speedY;//y軸速度變負的
+                                //console.log("球碰到頂部牆壁")
+                            }
+                            if(nexttop>windows.offsetHeight-ball.offsetHeight){//球掉出場外
+                            b--;
+                            var tlb = document.getElementById("tlb");
+                            tlb.innerText = "x" + b;
+                            if(b<0){//球沒了
+                                console.log("球掉場外又沒被用球")
+                                location.reload();
+                                alert("你的球沒了，請案確定！\n重新開始");
+
+                            }
+                            ballflush--;
+                            show(ball);
+                            console.log("球掉場外還有被用球")
+                        }
+                        }
+                    },20)
+                }
+            }
+            
+            stick.onmousedown = function(c){//滑鼠按到棍子後執行
+                var c = c||windows.event;//windows.event代表事件發生過程有效
+                var stickX = c.clientX - stick.offsetLeft;//滑塊的位置
+                if(mouthMv){    
+                    document.onmousemove = function(c){
+                        var c = c||windows.event;
+                        var l = c.clientX-stickX;
+                        if(l<=0){
+                            l=0;
+                        }
+                        if(l>=windows.offsetWidth-stick.offsetWidth){
+                            l=windows.offsetWidth-stick.offsetWidth;
+                        }
+                        stick.style.left = l + "px";
+                    }
+                }
+            }
+            
+            function show (s) {
+                if(s.style.display == 'block'){
+                    s.style.display = 'none';
+                }
+                else {
+                    s.style.display = 'block';
+                }
+            }
+            function  getsit(e, o){
+                var t=e.offsetTop;
+                var l=e.offsetLeft;
+                o.style.left = (l+5) + "px";
+                o.style.top = (t-50) + "px";
+                console.log("座標="+t+" y座標="+l);
+            }
+            function b_touch_div(ball,thediv){
+                let BallTop = ball.offsetTop;//球的頂部偏移量
+                let BallBottom = ball.offsetTop+ball.offsetHeight;//頂部偏移量+高度
+                let BallLeft = ball.offsetLeft;//球的左侧偏移量
+                let BallRight = ball.offsetLeft + ball.offsetWidth;//左側偏移量+寬度 offsetWidth=width+padding
+                let istouch = false
+                let DivTop = thediv.offsetTop;//被撞擊物的頂部偏移量
+                let DivBottom = thediv.offsetTop+thediv.offsetHeight;//頂部偏移量+高度
+                let DivLeft = thediv.offsetLeft;//被撞擊物的左侧偏移量
+                let DivRight = thediv.offsetLeft + thediv.offsetWidth;//左側偏移量+寬度
+                 //被撞擊物的左邊比撞擊物小 ||
+                istouch = havetouch(BallTop,BallBottom,BallLeft,BallRight,DivTop,DivBottom,DivLeft,DivRight,istouch)
+                return istouch
+            }
+            function square(n, leavl){
+                var muchS = document.getElementById("fightarea") //muchS : 方塊數量
+                var a = 0;
+                if(leavl == 0){
+                    console.log("難度:" + leavl + "產生:" + (n) + "個方塊")
+                }
+                if(leavl == 1){
+                    n+=3;
+                    console.log("難度:" + leavl + "產生:" + (n-1) + "個方塊")
+                }
+                if(leavl == 2){
+                    n+=5;
+                    n+=39;
+                    console.log("難度:" + leavl + "產生:" + (n-1) + "個方塊")
+                }
+                
+                var diffsqiare = rand((n-2),1);
+                for(var i = 0; i<n; i++){
+                    if(i != diffsqiare){
+                        var FDiv = document.createElement("div");
+                        FDiv.style.backgroundColor = 'white';
+                    }
+                    else if (i == diffsqiare){
+                        var FDiv = document.createElement("div");
+                        FDiv.style.backgroundColor = 'red';
+                        FDiv.id = "red";
+                        console.log("生成特殊方塊")
+                    }
+                    switch(leavl){
+                    case 1:
+                        FDiv.style.width = 48 + 'px';
+                        FDiv.style.height = 23 + 'px';
+                        break;
+                    case 2:
+                        FDiv.style.width =  18+ 'px';
+                        FDiv.style.height = 18 + 'px';
+                        break;
+                    }
+                    
+                    muchS.appendChild(FDiv);/*插入節點到打擊區裡*/
+                }   
+                squaresit(FDiv,n);
+            }
+            function squaresit(FDiv, n){
+                var FightArr = fightarea.getElementsByTagName("div");
+                for(var i=0;i<FightArr.length;i++){
+                    FightArr[i].style.left = FightArr[i].offsetLeft+"px";
+                    FightArr[i].style.top = FightArr[i].offsetTop+"px";
+                }
+                for(var i =0;i<FightArr.length;i++){
+                    FightArr[i].style.position="absolute";
+                }
+            }   
+            function doooooor(leavl){
+                var door = document.getElementById("door")
+                door.innerHTML = "關卡:" + (leavl+1);
+            switch(leavl){
+            case 0:
+                end = false;
+                sup.style.display = "none";
+                square(xth(5), leavl);
+                superball = false
+                superrr = 0;
+                break;
+            case 1:
+                sup.style.display = "none";
+                end = false;
+                superrr=0;
+                ball.style.backgroundColor = "red";
+                superball = false;
+                square(xth(8), leavl);
+                
+                superball = false
+                superrr = 0;
+                thegrade-=100;
+                break;
+            case 2:
+                sup.style.display = "none";
+                end = false;
+                superrr=0;
+                ball.style.backgroundColor = "red";
+                superball = false;
+                square(xth(10), leavl);
+               
+                superball = false
+                superrr = 0;
+                thegrade-=100;
+                break;
+            }
+            
+        }
+        }
+        function xth(rank){
+                var An = 0;
+                for(var i = 1; i <= rank; i++){
+                    An+=i;
+                }
+                return An;
+            }
+        function theDivThTimes(x){
+            var i = 0;
+            while(1){
+                if(xth(i) == x){
+                    return i;
+                }
+                else{
+                    i++
+                }
+            }
+        }
+        function rand(a,b){
+                return parseInt((Math.random()*a)+b);
+            }
+        function havetouch(bt,bb,bl,br,dt,db,dl,dr,c){
+            if(dl>br||dr<bl||dt>bb||db<bt){
+                return false;//沒撞到
+            }
+            else{
+                 return true;//確認撞擊     
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div id="start" style="display: block;">
+    打磚塊小遊戲<br><input type="button" id="begin" onclick="gamestart(0)"  value="死人模式"><input type="button" id="begin" onclick="gamestart(1)"  value="普通模式"><input type="button" id="begin" onclick="gamestart(2)"  value="困難模式">
+</div>
+
+        <div id="bangs">
+            打方塊
+            <div id="instructions"><div id="talk">說明:<br>"打磚塊小遊戲"<br>1.利用滑鼠移動滑塊打擊球，讓球擊碎方塊。<br>2.玩家可以按s來發射球。<br>3.紅磚塊裡藏有特殊能力，擊碎他可以獲得超能力"球碰到方塊會穿透"(持續10秒)。<br>4.擁有特殊能力的球為綠色。<br>5.擊碎一顆得方塊100分<br>6.右下角顯示備用球數，"O x 0"代表被用球為0。<br>7.一旦被用球用完且球掉離場外，遊戲結束<br>8.本遊戲為三關。<br>#每過一關都會增加球數</div></div>
+            <div id="point" style="display:none">
+                <div id="grade">分數:<span id="Pt"></span><span id="door"></span>
+            </div>
+        </div>
+    <div id="windows" style="display:none">
+        <div id="sup" style="display: none"></div>
+        <div id="fightarea"></div>
+        <div id="ball" style="display:none"></div>
+        <div id="stick" style="display:none"></div>
+        <div id="ball_less"><div id="lessball" style="display:none"></div><div id="lb"><span id="tlb"></span></div></div>
+    </div>
+    
+    
+    
+</body>
+</html>
