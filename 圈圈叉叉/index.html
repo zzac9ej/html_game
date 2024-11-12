@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./stylesheet.css" type="text/css"></style>
+    <script src="./game.js"></script>
+    <script>
+        var counter = 0;
+        var to_reset = false;
+        
+    </script>
+</head>
+
+<body onload="reset();">
+    <div id="board">
+        <table>
+            <caption><a id="reset_btn" onclick="reset();">重新开始</a></caption>
+            <tr>
+                <td><input id="1" type="button" onclick="player_move(1);" /></td>
+                <td><input id="2" type="button" onclick="player_move(2);" /></td>
+                <td><input id="3" type="button" onclick="player_move(3);" /></td>
+            </tr>
+            <tr>
+                <td><input id="4" type="button" onclick="player_move(4);" /></td>
+                <td><input id="5" type="button" onclick="player_move(5);" /></td>
+                <td><input id="6" type="button" onclick="player_move(6);" /></td>
+            </tr>
+            <tr>
+                <td><input id="7" type="button" onclick="player_move(7);" /></td>
+                <td><input id="8" type="button" onclick="player_move(8);" /></td>
+                <td><input id="9" type="button" onclick="player_move(9);" /></td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

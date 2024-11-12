@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lottery</title>
+    <link rel="stylesheet" href="./stylesheet.css" type="text/css">
+    <script>
+        var a;//隨機的數
+        var fight = 0;//打中重的
+        var lol = 0;//沒打中的
+        var times = 30;//剩餘秒數
+        var close = 1;//close = 0(開始遊戲) ， -1(關閉遊戲)
+    function reset(){//重新整理
+        window.location.href = window.location.href;
+    }
+    function start(){//開始遊戲
+        close--;
+        if(close == -1){
+            times = 0;//結束讀秒
+            return;
+        }
+        var timerVariable = setInterval(during, 1000);//每秒跑thes
+        document.getElementById("lavetime").value = times;
+        document.getElementById("hit").value = 0;
+        var txt = document.getElementById('caption');
+        txt.value = "遊戲開始進行";
+        light();
+    }
+    function light(){//點亮按鈕
+        a = rd();
+        var radio = document.getElementById(a);
+        radio.checked = true;
+    }
+    function rd(){//random數字
+        return Math.floor(Math.random()*60);
+    }
+    function look(id){//檢查有無按到
+        if(id == a){
+            fight++
+            document.getElementById("hit").value = fight;
+            light()
+        }
+        else{
+            lol--;
+            var radio = document.getElementById(a);
+            radio.checked = true;
+        }
+    }
+    function during(){
+        times--;
+        if(times <= 0){
+            var score = fight + lol;
+            alert("遊戲結束.\n打中次數為:" + fight + "\n沒打中次數:" + lol + "\n你的成績為:" + score);
+            document.getElementById("hit").value = " ";
+            times = 30;
+            document.getElementById("lavetime").value = " ";
+            reset();
+            
+        }
+        document.getElementById("lavetime").value = times;
+    }
+    </script>
+
+<body>
+    <div id="title">
+        打地鼠
+    </div>
+    <div id="gamerules">
+        按下開始按鈕進行遊戲，畫面中會出現小藍點，移動游標到小蘭點游標到小藍點進行點擊，就代表打中(+1)，若按錯的話會被扣分(-1)。
+    </div>
+    <div id="gameset">
+        測試時間<input type="text" id="seconds" value=30 style="width: 30px;">秒  &nbsp &nbsp 剩餘時間:<input type="text" id="lavetime" style="width: 30px;"><br>
+        <input type="button" value="開始|停止" onclick="start();"> &nbsp &nbsp&nbsp &nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp打中次數:<input type="text" id="hit"style="width: 30px;" id="f">
+    </div>
+    <div id="start"> 
+        <input type="text" id="caption" value="案上面按鈕，開始遊戲" style="width: 250px;">
+    </div><br><br>
+    <div id="game">
+        <input type="radio" name="a" id="1"onclick="look(1);"><input type="radio" name="a" id="2"onclick="look(2);"><input type="radio" name="a" id="3"onclick="look(3);"><input type="radio" name="a" id="4"onclick="look(4);"><input type="radio" name="a" id="5"onclick="look(5);"><input type="radio" name="a" id="6"onclick="look(6);"><input type="radio" name="a" id="7"onclick="look(7);"><input type="radio" name="a" id="8"onclick="look(8);"><input type="radio" name="a" id="9"onclick="look(9);"><input type="radio" name="a" id="10"onclick="look(10);"><br>
+        <input type="radio" name="a" id="11"onclick="look(11);"><input type="radio" name="a" id="12"onclick="look(12);"><input type="radio" name="a" id="13"onclick="look(13);"><input type="radio" name="a" id="14"onclick="look(14);"><input type="radio" name="a" id="15"onclick="look(15);"><input type="radio" name="a" id="16"onclick="look(16);"><input type="radio" name="a" id="17"onclick="look(17);"><input type="radio" name="a" id="18"onclick="look(18);"><input type="radio" name="a" id="19"onclick="look(19);"><input type="radio" name="a" id="20"onclick="look(20);"><br>
+        <input type="radio" name="a" id="21"onclick="look(21);"><input type="radio" name="a" id="22"onclick="look(22);"><input type="radio" name="a" id="23"onclick="look(23);"><input type="radio" name="a" id="24"onclick="look(24);"><input type="radio" name="a" id="25"onclick="look(25);"><input type="radio" name="a" id="26"onclick="look(26);"><input type="radio" name="a" id="27"onclick="look(27);"><input type="radio" name="a" id="28"onclick="look(28);"><input type="radio" name="a" id="29"onclick="look(29);"><input type="radio" name="a" id="30"onclick="look(30);"><br>
+        <input type="radio" name="a" id="31"onclick="look(31);"><input type="radio" name="a" id="32"onclick="look(32);"><input type="radio" name="a" id="33"onclick="look(33);"><input type="radio" name="a" id="34"onclick="look(34);"><input type="radio" name="a" id="35"onclick="look(35);"><input type="radio" name="a" id="36"onclick="look(36);"><input type="radio" name="a" id="37"onclick="look(37);"><input type="radio" name="a" id="38"onclick="look(38);"><input type="radio" name="a" id="39"onclick="look(39);"><input type="radio" name="a" id="40"onclick="look(40);"><br>
+        <input type="radio" name="a" id="41"onclick="look(41);"><input type="radio" name="a" id="42"onclick="look(42);"><input type="radio" name="a" id="43"onclick="look(43);"><input type="radio" name="a" id="44"onclick="look(44);"><input type="radio" name="a" id="45"onclick="look(45);"><input type="radio" name="a" id="46"onclick="look(46);"><input type="radio" name="a" id="47"onclick="look(47);"><input type="radio" name="a" id="48"onclick="look(48);"><input type="radio" name="a" id="49"onclick="look(49);"><input type="radio" name="a" id="50"onclick="look(50);"><br>
+        <input type="radio" name="a" id="51"onclick="look(51);"><input type="radio" name="a" id="52"onclick="look(52);"><input type="radio" name="a" id="53"onclick="look(53);"><input type="radio" name="a" id="54"onclick="look(54);"><input type="radio" name="a" id="55"onclick="look(55);"><input type="radio" name="a" id="56"onclick="look(56);"><input type="radio" name="a" id="57"onclick="look(57);"><input type="radio" name="a" id="58"onclick="look(58);"><input type="radio" name="a" id="59"onclick="look(59);"><input type="radio" name="a" id="60"onclick="look(60);">
+
+    </div>
+    
+
+</body>
